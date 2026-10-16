@@ -56,6 +56,7 @@
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
+            overflow: hidden; /* Запобігає виходу збільшених елементів за межі картки */
         }
         .blue-glow {
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
@@ -390,21 +391,46 @@
             updateHeaderUser();
             updateCartBadge();
             updateWishlistBadge();
+            updateCategoryCounts();
             renderProducts();
             renderNewProducts();
-            document.getElementById('countAll').innerText = products.length;
         };
 
         function filterCategory(cat) {
             currentCategory = cat;
+            
+            // Оновлення активних стилів кнопок категорій
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.classList.add('text-blue-400', 'bg-slate-800/80');
+                    btn.classList.remove('text-slate-400', 'hover:text-blue-400', 'hover:bg-slate-800/50');
+                } else {
+                    btn.classList.remove('text-blue-400', 'bg-slate-800/80');
+                    btn.classList.add('text-slate-400', 'hover:text-blue-400', 'hover:bg-slate-800/50');
+                }
+            });
+
             renderProducts();
             renderNewProducts();
         }
 
         function handleSearch(q) {
             searchQuery = q.toLowerCase().trim();
+            updateCategoryCounts();
             renderProducts();
             renderNewProducts();
+        }
+
+        function updateCategoryCounts() {
+            // Фільтрація по пошуковому запиту для правильного відображення кількості знайдених товарів в категоріях
+            const matchingSearchProducts = products.filter(p => !searchQuery || p.title.toLowerCase().includes(searchQuery));
+
+            document.getElementById('countAll').innerText = matchingSearchProducts.length;
+            document.getElementById('countSmartphones').innerText = matchingSearchProducts.filter(p => p.category === 'smartphones').length;
+            document.getElementById('countLaptops').innerText = matchingSearchProducts.filter(p => p.category === 'laptops').length;
+            document.getElementById('countAudio').innerText = matchingSearchProducts.filter(p => p.category === 'audio').length;
+            document.getElementById('countGaming').innerText = matchingSearchProducts.filter(p => p.category === 'gaming').length;
+            document.getElementById('countAccessories').innerText = matchingSearchProducts.filter(p => p.category === 'accessories').length;
         }
 
         function scrollProductsRow(offset) {
@@ -452,7 +478,7 @@
         function createProductCardHTML(p) {
             const isFav = wishlist.some(item => item.id === p.id);
             return `
-            <div class="custom-card p-4 flex flex-col justify-between hover:border-blue-500 transition-all duration-300 hover:scale-105 group relative cursor-pointer min-w-[260px] max-w-[260px] flex-shrink-0" onclick="openProductDetailModal(${p.id})">
+            <div class="custom-card p-4 flex flex-col justify-between hover:border-blue-500 transition-all duration-300 hover:scale-[1.02] group relative cursor-pointer min-w-[260px] max-w-[260px] flex-shrink-0" onclick="openProductDetailModal(${p.id})">
                 <span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full z-10 shadow">${p.discount}</span>
                 <button onclick="event.stopPropagation(); toggleWishlist(${p.id})" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-900/80 text-white flex items-center justify-center hover:text-blue-400 transition z-10">
                     <i class="fa-${isFav ? 'solid text-blue-400' : 'regular'} fa-heart"></i>
