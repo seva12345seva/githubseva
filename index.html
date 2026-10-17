@@ -74,16 +74,33 @@
                 <span>TechWorld</span>
             </a>
 
-            <div class="flex-1 max-w-2xl relative hidden md:block">
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-xl relative hidden md:block">
                 <div class="flex items-center bg-navy-900 border border-slate-800 rounded-full px-4 py-2 focus-within:border-blue-500 transition">
                     <i class="fa-solid fa-search text-slate-400"></i>
-                    <input type="text" id="searchInput" placeholder="Пошук товарів (наприклад, iPhone, пилосос, ноутбук)..." 
+                    <input type="text" id="searchInput" placeholder="Пошук товарів..." 
                            class="w-full bg-transparent border-none outline-none text-sm text-slate-100 ml-3 placeholder-slate-500"
                            oninput="handleSearch(this.value)">
                 </div>
             </div>
 
+            <!-- Header Actions -->
             <div class="flex items-center gap-3">
+                <!-- Языковой переключатель -->
+                <div class="bg-navy-900 border border-slate-800 rounded-xl px-2 py-1 flex items-center gap-1 text-xs font-bold">
+                    <button onclick="setLanguage('uk')" id="langUk" class="px-2 py-1 rounded-lg bg-blue-600 text-white transition">УКР</button>
+                    <button onclick="setLanguage('en')" id="langEn" class="px-2 py-1 rounded-lg text-slate-400 hover:text-white transition">ENG</button>
+                </div>
+
+                <!-- Баланс денег -->
+                <div class="hidden xl:flex items-center gap-2 bg-navy-900 border border-slate-800 px-3 py-1.5 rounded-xl text-xs">
+                    <i class="fa-solid fa-wallet text-emerald-400"></i>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block" data-i18n="wallet_lbl">Баланс:</span>
+                        <strong class="text-emerald-400" id="userBalance">12 450 ₴</strong>
+                    </div>
+                </div>
+
                 <button onclick="openWishlistModal()" class="relative w-10 h-10 rounded-full bg-navy-900 border border-slate-800 flex items-center justify-center text-slate-200 hover:border-blue-500 hover:text-blue-400 transition" title="Обране">
                     <i class="fa-solid fa-heart"></i>
                     <span id="wishlistBadge" class="absolute -top-1 -right-1 bg-blue-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
@@ -102,24 +119,24 @@
     <!-- Main Content -->
     <main class="max-w-[1700px] mx-auto px-6 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-6 gap-6">
         
-        <!-- Sidebar -->
+        <!-- Left Sidebar -->
         <aside class="space-y-6 hidden lg:block lg:col-span-1">
             
             <!-- 1. Каталог категорий -->
             <div class="custom-card p-4">
                 <h3 class="font-bold text-sm mb-3 flex items-center gap-2 text-blue-400">
-                    <i class="fa-solid fa-list"></i> Категорії товарів
+                    <i class="fa-solid fa-list"></i> <span data-i18n="cat_title">Категорії товарів</span>
                 </h3>
                 <ul class="space-y-2 text-xs" id="categoryList">
                     <li>
                         <button onclick="filterCategory('all')" class="w-full text-left px-3 py-2 rounded-xl font-medium transition cat-btn text-blue-400 bg-slate-800/80" data-cat="all">
-                            Усі товари
+                            <span data-i18n="cat_all">Усі товари</span>
                         </button>
                     </li>
                     
                     <li class="border border-slate-800 rounded-xl overflow-hidden bg-navy-900">
                         <div class="flex items-center justify-between px-3 py-2.5 cursor-pointer hover:bg-slate-800/50" onclick="toggleSubmenu('sub-home', 'arrow-home')">
-                            <span class="font-semibold text-slate-200">Побутова техніка</span>
+                            <span class="font-semibold text-slate-200" data-i18n="cat_home">Побутова техніка</span>
                             <i id="arrow-home" class="fa-solid fa-chevron-down text-slate-400 text-[10px] transition-transform duration-300"></i>
                         </div>
                         <ul id="sub-home" class="hidden bg-navy-800/60 border-t border-slate-800 p-2 space-y-1">
@@ -131,7 +148,7 @@
 
                     <li class="border border-slate-800 rounded-xl overflow-hidden bg-navy-900">
                         <div class="flex items-center justify-between px-3 py-2.5 cursor-pointer hover:bg-slate-800/50" onclick="toggleSubmenu('sub-electronics', 'arrow-elec')">
-                            <span class="font-semibold text-slate-200">Електроніка</span>
+                            <span class="font-semibold text-slate-200" data-i18n="cat_elec">Електроніка</span>
                             <i id="arrow-elec" class="fa-solid fa-chevron-down text-slate-400 text-[10px] transition-transform duration-300"></i>
                         </div>
                         <ul id="sub-electronics" class="hidden bg-navy-800/60 border-t border-slate-800 p-2 space-y-1">
@@ -143,7 +160,7 @@
 
                     <li class="border border-slate-800 rounded-xl overflow-hidden bg-navy-900">
                         <div class="flex items-center justify-between px-3 py-2.5 cursor-pointer hover:bg-slate-800/50" onclick="toggleSubmenu('sub-gaming', 'arrow-game')">
-                            <span class="font-semibold text-slate-200">Геймінг & Аудіо</span>
+                            <span class="font-semibold text-slate-200" data-i18n="cat_game">Геймінг & Аудіо</span>
                             <i id="arrow-game" class="fa-solid fa-chevron-down text-slate-400 text-[10px] transition-transform duration-300"></i>
                         </div>
                         <ul id="sub-gaming" class="hidden bg-navy-800/60 border-t border-slate-800 p-2 space-y-1">
@@ -155,15 +172,15 @@
                 </ul>
             </div>
 
-            <!-- 2. ПОЛЗУНОК ЦЕН СБОКУ -->
+            <!-- 2. Позунок цен сбоку -->
             <div class="custom-card p-4 space-y-3">
                 <h3 class="font-bold text-sm text-blue-400 flex items-center gap-2">
-                    <i class="fa-solid fa-sliders"></i> Ціновий діапазон
+                    <i class="fa-solid fa-sliders"></i> <span data-i18n="price_range">Ціновий діапазон</span>
                 </h3>
                 <div class="space-y-3 text-xs">
                     <div>
                         <div class="flex justify-between text-slate-400 mb-1">
-                            <span>Мін. ціна:</span>
+                            <span data-i18n="min_price">Мін. ціна:</span>
                             <span id="minPriceVal" class="text-white font-bold">0 ₴</span>
                         </div>
                         <input type="range" id="minPriceRange" min="0" max="150000" step="1000" value="0" 
@@ -171,7 +188,7 @@
                     </div>
                     <div>
                         <div class="flex justify-between text-slate-400 mb-1">
-                            <span>Макс. ціна:</span>
+                            <span data-i18n="max_price">Макс. ціна:</span>
                             <span id="maxPriceVal" class="text-white font-bold">150 000 ₴</span>
                         </div>
                         <input type="range" id="maxPriceRange" min="0" max="150000" step="1000" value="150000" 
@@ -183,7 +200,7 @@
             <!-- 3. Страны-производители -->
             <div class="custom-card p-4 space-y-3">
                 <h3 class="font-bold text-sm text-blue-400 flex items-center gap-2">
-                    <i class="fa-solid fa-earth-americas"></i> Країна-виробник
+                    <i class="fa-solid fa-earth-americas"></i> <span data-i18n="country_title">Країна-виробник</span>
                 </h3>
                 <div class="space-y-2 text-xs text-slate-300" id="countriesFilterContainer">
                     <label class="flex items-center gap-2 cursor-pointer hover:text-blue-400"><input type="checkbox" value="США" onchange="handleCountryFilter()" class="accent-blue-500 rounded"> США</label>
@@ -199,62 +216,50 @@
         <!-- Main Product Section -->
         <section class="lg:col-span-5 space-y-6">
             
-            <!-- Banner -->
-            <div class="relative h-64 rounded-2xl overflow-hidden border border-slate-800 custom-card">
-                <div class="absolute inset-0 bg-cover bg-center transition-all duration-700" style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80');">
-                    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center">
-                        <div class="max-w-xl flex flex-col items-center">
-                            <span class="bg-blue-600 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase mb-2">Спеціальна пропозиція</span>
-                            <h2 class="text-xl md:text-2xl font-black text-white mb-2">Грандіозний розпродаж техніки</h2>
-                            <p class="text-xs text-slate-300 mb-4">Знижки до -40% на гаджети, електроніку та побутову техніку!</p>
-                        </div>
-                    </div>
+            <!-- Панель управления: Сортировка + Выбор количества (3 или 5 карточек на видимую ширину ряда) -->
+            <div class="custom-card p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                <!-- Сортировка по цене -->
+                <div class="flex items-center gap-3 w-full md:w-auto">
+                    <span class="text-xs font-bold text-slate-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-up-wide-short text-blue-400"></i> <span data-i18n="sort_label">Сортування:</span>
+                    </span>
+                    <select id="sortSelect" onchange="changeSortOrder(this.value)" class="bg-navy-900 border border-slate-800 text-xs text-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 cursor-pointer">
+                        <option value="" data-i18n="sort_def">За замовчуванням</option>
+                        <option value="cheap" data-i18n="sort_cheap">Від дешевих до дорогих</option>
+                        <option value="expensive" data-i18n="sort_expensive">Від дорогих до дешевих</option>
+                    </select>
+                </div>
+
+                <!-- Переключатель режима: 3 или 5 карточек в ряд -->
+                <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+                    <span class="text-xs font-bold text-slate-400" data-i18n="grid_view">У рядку:</span>
+                    <button onclick="setRowView(3)" id="rowBtn3" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white transition shadow">3 в ряд</button>
+                    <button onclick="setRowView(5)" id="rowBtn5" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-navy-900 border border-slate-800 text-slate-400 hover:text-white transition">5 в ряд</button>
                 </div>
             </div>
 
-            <!-- БЛОК СОРТИРОВКИ СО СТРЕЛОЧКОЙ -->
-            <div class="custom-card p-4 space-y-3">
-                <div class="flex items-center justify-between cursor-pointer" onclick="toggleSortDropdown()">
-                    <div class="text-sm font-semibold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-arrow-up-wide-short text-blue-400"></i> Сортування за вартістю
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span id="sortStatusLabel" class="text-xs text-slate-400">За замовчуванням</span>
-                        <i id="sortArrowIcon" class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300"></i>
-                    </div>
-                </div>
-                <div id="sortOptionsContainer" class="hidden pt-3 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <button onclick="setSortOrder('cheap')" class="text-left px-3 py-2 rounded-xl bg-navy-900 border border-slate-800 text-xs text-slate-300 hover:border-blue-500 hover:text-blue-400 transition">
-                        <i class="fa-solid fa-arrow-down-9-1 mr-1"></i> Від дешевих до дорогих
-                    </button>
-                    <button onclick="setSortOrder('expensive')" class="text-left px-3 py-2 rounded-xl bg-navy-900 border border-slate-800 text-xs text-slate-300 hover:border-blue-500 hover:text-blue-400 transition">
-                        <i class="fa-solid fa-arrow-up-1-9 mr-1"></i> Від дорогих до дешевих
-                    </button>
-                </div>
-            </div>
-
-            <!-- Header Info со стрелочками прокрутки товаров в ряд -->
+            <!-- Header Info со стрелочками для прокрутки ряда назад/вперед -->
             <div class="flex items-center justify-between bg-navy-700 p-4 rounded-2xl border border-slate-800">
                 <div class="text-sm font-semibold text-slate-300 flex items-center gap-2">
-                    <i class="fa-solid fa-fire text-blue-400"></i> Товари в ряд (<span id="totalCountSpan">0</span> знайдено)
+                    <i class="fa-solid fa-fire text-blue-400"></i> <span data-i18n="found_title">Знайдено товарів:</span> <span id="totalCountSpan">0</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="scrollProductsRow(-350)" class="w-9 h-9 rounded-xl bg-navy-900 border border-slate-600 text-white hover:bg-blue-600 transition flex items-center justify-center shadow" title="Прокрутити вліво">
+                    <button onclick="scrollProductsRow(-350)" class="w-9 h-9 rounded-xl bg-navy-900 border border-slate-600 text-white hover:bg-blue-600 transition flex items-center justify-center shadow" title="Назад">
                         <i class="fa-solid fa-arrow-left text-xs"></i>
                     </button>
-                    <button onclick="scrollProductsRow(350)" class="w-9 h-9 rounded-xl bg-navy-900 border border-slate-600 text-white hover:bg-blue-600 transition flex items-center justify-center shadow" title="Прокрутити вправо">
+                    <button onclick="scrollProductsRow(350)" class="w-9 h-9 rounded-xl bg-navy-900 border border-slate-600 text-white hover:bg-blue-600 transition flex items-center justify-center shadow" title="Вперед">
                         <i class="fa-solid fa-arrow-right text-xs"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Products Row Container (Товары в ряд со скроллом) -->
+            <!-- Products Single Horizontal Row Container -->
             <div id="productGrid" class="flex gap-5 overflow-x-auto no-scrollbar pb-4 pt-2 scroll-smooth"></div>
 
         </section>
     </main>
 
-    <!-- FOOTER / ПОДВАЛ САЙТА С ТЕЛЕФОНАМИ РАЗРАБОТЧИКОВ И ПОДДЕРЖКОЙ -->
+    <!-- FOOTER / ПОДВАЛ САЙТА -->
     <footer class="bg-navy-800 border-t border-slate-800 mt-12 py-12">
         <div class="max-w-[1700px] mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="space-y-3">
@@ -262,20 +267,20 @@
                     <i class="fa-solid fa-bolt-lightning text-blue-400"></i>
                     <span>TechWorld</span>
                 </div>
-                <p class="text-xs text-slate-400 leading-relaxed">Сучасний інтернет-магазин електроніки та побутової техніки з передовими технологіями та швидкою доставкою.</p>
+                <p class="text-xs text-slate-400 leading-relaxed" data-i18n="footer_desc">Сучасний інтернет-магазин електроніки та побутової техніки з передовими технологіями та швидкою доставкою.</p>
                 <p class="text-[11px] text-slate-500">© 2026 TechWorld. Усі права захищено.</p>
             </div>
             <div>
-                <h4 class="font-bold text-sm text-slate-200 mb-3 uppercase tracking-wider">Підтримка покупців</h4>
+                <h4 class="font-bold text-sm text-slate-200 mb-3 uppercase tracking-wider" data-i18n="footer_sup">Підтримка покупців</h4>
                 <ul class="space-y-2 text-xs text-slate-400">
-                    <li><a href="#" class="hover:text-blue-400 transition">Центр підтримки клієнтів</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition">Умови гарантії та повернення</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition">Способи оплати та доставки</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition">Безпека акаунта (2FA)</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition" data-i18n="sup_1">Центр підтримки клієнтів</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition" data-i18n="sup_2">Умови гарантії та повернення</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition" data-i18n="sup_3">Способи оплати та доставки</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition" data-i18n="sup_4">Безпека акаунта (2FA)</a></li>
                 </ul>
             </div>
             <div>
-                <h4 class="font-bold text-sm text-slate-200 mb-3 uppercase tracking-wider">Контакти & Розробники</h4>
+                <h4 class="font-bold text-sm text-slate-200 mb-3 uppercase tracking-wider" data-i18n="footer_dev">Контакти & Розробники</h4>
                 <ul class="space-y-2 text-xs text-slate-400">
                     <li><i class="fa-solid fa-phone text-blue-400 mr-2"></i> Гаряча лінія: <strong>0 (800) 333-222</strong></li>
                     <li><i class="fa-solid fa-code text-blue-400 mr-2"></i> Головний розробник: <strong>+38 (099) 111-22-33</strong></li>
@@ -284,8 +289,8 @@
                 </ul>
             </div>
             <div>
-                <h4 class="font-bold text-sm text-slate-200 mb-3 uppercase tracking-wider">Ми в соцмережах</h4>
-                <p class="text-xs text-slate-400 mb-3">Слідкуйте за новими надходженнями гаджетів:</p>
+                <h4 class="font-bold text-sm text-slate-200 mb-3 uppercase tracking-wider" data-i18n="footer_soc">Ми в соцмережах</h4>
+                <p class="text-xs text-slate-400 mb-3" data-i18n="footer_soc_desc">Слідкуйте за новими надходженнями гаджетів:</p>
                 <div class="flex items-center gap-3">
                     <a href="#" class="w-9 h-9 rounded-xl bg-navy-900 border border-slate-700 flex items-center justify-center text-slate-300 hover:text-blue-400 hover:border-blue-500 transition"><i class="fa-brands fa-telegram"></i></a>
                     <a href="#" class="w-9 h-9 rounded-xl bg-navy-900 border border-slate-700 flex items-center justify-center text-slate-300 hover:text-blue-400 hover:border-blue-500 transition"><i class="fa-brands fa-instagram"></i></a>
@@ -311,7 +316,7 @@
             
             <div class="text-center pb-4 mb-6 border-b border-slate-800">
                 <h3 class="text-2xl font-black text-slate-100 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-cart-shopping text-blue-400"></i> Кошик покупок
+                    <i class="fa-solid fa-cart-shopping text-blue-400"></i> <span data-i18n="cart_title">Кошик покупок</span>
                 </h3>
             </div>
 
@@ -319,23 +324,23 @@
                 <div class="lg:col-span-7 space-y-3 max-h-96 overflow-y-auto pr-2" id="cartItemsContainer"></div>
                 <div class="lg:col-span-5 bg-navy-900 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
                     <div class="space-y-4">
-                        <h4 class="font-bold text-base text-blue-400 border-b border-slate-800 pb-2">Деталі замовлення</h4>
+                        <h4 class="font-bold text-base text-blue-400 border-b border-slate-800 pb-2" data-i18n="order_details">Деталі замовлення</h4>
                         <div class="flex justify-between text-sm text-slate-400">
-                            <span>Загальна кількість:</span>
+                            <span data-i18n="total_qty">Загальна кількість:</span>
                             <span id="cartItemCount" class="font-semibold text-slate-200">0 шт.</span>
                         </div>
                         <div class="flex justify-between text-sm text-slate-400">
-                            <span>Знижка:</span>
+                            <span data-i18n="discount_lbl">Знижка:</span>
                             <span class="font-semibold text-emerald-400">-15%</span>
                         </div>
                         <div class="border-t border-slate-800 pt-3 flex justify-between text-lg font-black">
-                            <span>Разом до сплати:</span>
+                            <span data-i18n="total_pay">Разом до сплати:</span>
                             <span id="cartTotal" class="text-blue-400">0 ₴</span>
                         </div>
                     </div>
                     <div class="mt-6">
                         <button onclick="checkoutOrder()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 text-base">
-                            <i class="fa-solid fa-check"></i> Оформити замовлення
+                            <i class="fa-solid fa-check"></i> <span data-i18n="checkout_btn">Оформити замовлення</span>
                         </button>
                     </div>
                 </div>
@@ -347,17 +352,8 @@
     <div id="wishlistModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="custom-card w-full max-w-md p-6 relative shadow-2xl">
             <button onclick="closeWishlistModal()" class="absolute top-4 right-4 text-slate-400 hover:text-blue-400"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold mb-3 text-blue-400">Обране</h3>
+            <h3 class="text-lg font-bold mb-3 text-blue-400" data-i18n="wishlist_title">Обране</h3>
             <div id="wishlistItemsContainer" class="space-y-2"></div>
-        </div>
-    </div>
-
-    <!-- Auth Modal -->
-    <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="custom-card w-full max-w-sm p-6 relative shadow-2xl text-center">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-bold mb-4">Вхід в акаунт</h3>
-            <button onclick="handleLoginSubmit()" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold">Увійти як Олександр</button>
         </div>
     </div>
 
@@ -381,10 +377,81 @@
             { id: 10, title: "Logitech MX Master 3S Mouse", category: "Геймінг", subcategory: "Аксесуари", country: "Швейцарія", price: 4499, oldPrice: 5299, rating: 4.9, stock: 25, img: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=600&q=80", desc: "Ергономічна бездротова миша для професіоналів." }
         ];
 
-        let currentUser = JSON.parse(localStorage.getItem('techworld_user')) || null;
+        const translations = {
+            uk: {
+                cat_title: "Категорії товарів",
+                cat_all: "Усі товари",
+                cat_home: "Побутова техніка",
+                cat_elec: "Електроніка",
+                cat_game: "Геймінг & Аудіо",
+                price_range: "Ціновий діапазон",
+                min_price: "Мін. ціна:",
+                max_price: "Макс. ціна:",
+                country_title: "Країна-виробник",
+                sort_label: "Сортування:",
+                sort_def: "За замовчуванням",
+                sort_cheap: "Від дешевих до дорогих",
+                sort_expensive: "Від дорогих до дешевих",
+                grid_view: "У рядку:",
+                found_title: "Знайдено товарів:",
+                wallet_lbl: "Баланс:",
+                footer_desc: "Сучасний інтернет-магазин електроніки та побутової техніки з передовими технологіями та швидкою доставкою.",
+                footer_sup: "Підтримка покупців",
+                sup_1: "Центр підтримки клієнтів",
+                sup_2: "Умови гарантії та повернення",
+                sup_3: "Способи оплати та доставки",
+                sup_4: "Безпека акаунта (2FA)",
+                footer_dev: "Контакти & Розробники",
+                footer_soc: "Ми в соцмережах",
+                footer_soc_desc: "Слідкуйте за новими надходженнями гаджетів:",
+                cart_title: "Кошик покупок",
+                order_details: "Деталі замовлення",
+                total_qty: "Загальна кількість:",
+                discount_lbl: "Знижка:",
+                total_pay: "Разом до сплати:",
+                checkout_btn: "Оформити замовлення",
+                wishlist_title: "Обране"
+            },
+            en: {
+                cat_title: "Categories",
+                cat_all: "All Products",
+                cat_home: "Home Appliances",
+                cat_elec: "Electronics",
+                cat_game: "Gaming & Audio",
+                price_range: "Price Range",
+                min_price: "Min Price:",
+                max_price: "Max Price:",
+                country_title: "Manufacturer Country",
+                sort_label: "Sort by:",
+                sort_def: "Default",
+                sort_cheap: "Price: Low to High",
+                sort_expensive: "Price: High to Low",
+                grid_view: "In row:",
+                found_title: "Products found:",
+                wallet_lbl: "Balance:",
+                footer_desc: "Modern electronics and home appliances online store with advanced technologies and fast delivery.",
+                footer_sup: "Customer Support",
+                sup_1: "Customer Care Center",
+                sup_2: "Warranty & Return Policy",
+                sup_3: "Payment & Delivery Methods",
+                sup_4: "Account Security (2FA)",
+                footer_dev: "Contacts & Developers",
+                footer_soc: "Social Media",
+                footer_soc_desc: "Follow new arrivals:",
+                cart_title: "Shopping Cart",
+                order_details: "Order Details",
+                total_qty: "Total Quantity:",
+                discount_lbl: "Discount:",
+                total_pay: "Total to Pay:",
+                checkout_btn: "Checkout Order",
+                wishlist_title: "Wishlist"
+            }
+        };
+
+        let currentLang = 'uk';
+        let currentCardWidth = 3; // 3 или 5 карточек на видимую ширину экрана
         let cart = JSON.parse(localStorage.getItem('techworld_cart')) || [];
         let wishlist = JSON.parse(localStorage.getItem('techworld_wishlist')) || [];
-        
         let currentCategory = 'all';
         let currentSubcategory = '';
         let searchQuery = '';
@@ -396,6 +463,38 @@
             updateWishlistBadge();
             renderProducts();
         };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('langUk').className = lang === 'uk' ? 'px-2 py-1 rounded-lg bg-blue-600 text-white transition' : 'px-2 py-1 rounded-lg text-slate-400 hover:text-white transition';
+            document.getElementById('langEn').className = lang === 'en' ? 'px-2 py-1 rounded-lg bg-blue-600 text-white transition' : 'px-2 py-1 rounded-lg text-slate-400 hover:text-white transition';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+        }
+
+        function setRowView(count) {
+            currentCardWidth = count;
+            const btn3 = document.getElementById('rowBtn3');
+            const btn5 = document.getElementById('rowBtn5');
+
+            if (count === 3) {
+                btn3.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white transition shadow";
+                btn5.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-navy-900 border border-slate-800 text-slate-400 hover:text-white transition";
+            } else {
+                btn5.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white transition shadow";
+                btn3.className = "px-3 py-1.5 rounded-xl text-xs font-bold bg-navy-900 border border-slate-800 text-slate-400 hover:text-white transition";
+            }
+            renderProducts();
+        }
+
+        function scrollProductsRow(offset) {
+            document.getElementById('productGrid').scrollBy({ left: offset, behavior: 'smooth' });
+        }
 
         function toggleSubmenu(subId, arrowId) {
             const submenu = document.getElementById(subId);
@@ -424,11 +523,7 @@
         function handlePriceFilter() {
             const min = parseInt(document.getElementById('minPriceRange').value);
             const max = parseInt(document.getElementById('maxPriceRange').value);
-            
-            if (min > max) {
-                document.getElementById('minPriceRange').value = max;
-            }
-
+            if (min > max) document.getElementById('minPriceRange').value = max;
             document.getElementById('minPriceVal').innerText = parseInt(document.getElementById('minPriceRange').value).toLocaleString() + ' ₴';
             document.getElementById('maxPriceVal').innerText = parseInt(document.getElementById('maxPriceRange').value).toLocaleString() + ' ₴';
             renderProducts();
@@ -438,31 +533,15 @@
             renderProducts();
         }
 
-        function toggleSortDropdown() {
-            const dropdown = document.getElementById('sortOptionsContainer');
-            const arrow = document.getElementById('sortArrowIcon');
-            dropdown.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
-        }
-
-        function setSortOrder(order) {
+        function changeSortOrder(order) {
             sortOrder = order;
-            document.getElementById('sortStatusLabel').innerText = order === 'cheap' ? 'Від дешевих до дорогих' : 'Від дорогих до дешевих';
-            document.getElementById('sortOptionsContainer').classList.add('hidden');
-            document.getElementById('sortArrowIcon').classList.remove('rotate-180');
             renderProducts();
-        }
-
-        function scrollProductsRow(offset) {
-            document.getElementById('productGrid').scrollBy({ left: offset, behavior: 'smooth' });
         }
 
         function renderProducts() {
             const minPrice = parseInt(document.getElementById('minPriceRange').value);
             const maxPrice = parseInt(document.getElementById('maxPriceRange').value);
-
-            const checkedCountries = Array.from(document.querySelectorAll('#countriesFilterContainer input[type="checkbox"]:checked'))
-                                          .map(cb => cb.value);
+            const checkedCountries = Array.from(document.querySelectorAll('#countriesFilterContainer input[type="checkbox"]:checked')).map(cb => cb.value);
 
             let filtered = products.filter(p => {
                 const matchCat = currentCategory === 'all' || p.category === currentCategory;
@@ -470,52 +549,48 @@
                 const matchSearch = !searchQuery || p.title.toLowerCase().includes(searchQuery);
                 const matchPrice = p.price >= minPrice && p.price <= maxPrice;
                 const matchCountry = checkedCountries.length === 0 || checkedCountries.includes(p.country);
-                
                 return matchCat && matchSub && matchSearch && matchPrice && matchCountry;
             });
 
-            if (sortOrder === 'cheap') {
-                filtered.sort((a, b) => a.price - b.price);
-            } else if (sortOrder === 'expensive') {
-                filtered.sort((a, b) => b.price - a.price);
-            }
+            if (sortOrder === 'cheap') filtered.sort((a, b) => a.price - b.price);
+            else if (sortOrder === 'expensive') filtered.sort((a, b) => b.price - a.price);
 
             document.getElementById('totalCountSpan').innerText = filtered.length;
             const grid = document.getElementById('productGrid');
 
+            // Задаем точную ширину карточек в зависимости от выбранного режима (3 или 5 в ряд)
+            const cardWidthClass = currentCardWidth === 3 ? 'min-w-[calc(33.333%-14px)] max-w-[calc(33.333%-14px)]' : 'min-w-[calc(20%-16px)] max-w-[calc(20%-16px)]';
+
             if (filtered.length === 0) {
-                grid.innerHTML = `<div class="py-12 text-center text-slate-500 w-full">Товари не знайдені за заданими критеріями</div>`;
+                grid.innerHTML = `<div class="py-12 text-center text-slate-500 w-full">Товари не знайдені</div>`;
                 return;
             }
 
             grid.innerHTML = filtered.map(p => {
                 const isFav = wishlist.some(item => item.id === p.id);
                 return `
-                <div class="custom-card p-4 flex flex-col justify-between hover:border-blue-500 transition-all duration-300 hover:scale-[1.02] group relative cursor-pointer min-w-[260px] max-w-[260px] flex-shrink-0" onclick="openProductDetailModal(${p.id})">
+                <div class="custom-card p-4 flex flex-col justify-between hover:border-blue-500 transition-all duration-300 group cursor-pointer relative flex-shrink-0 ${cardWidthClass}" onclick="openProductDetailModal(${p.id})">
                     <button onclick="event.stopPropagation(); toggleWishlist(${p.id})" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-900/80 text-white flex items-center justify-center hover:text-blue-400 transition z-10">
                         <i class="fa-${isFav ? 'solid text-blue-400' : 'regular'} fa-heart"></i>
                     </button>
-                    <div class="h-44 w-full rounded-xl mb-3 overflow-hidden bg-navy-900">
-                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="h-40 w-full rounded-xl mb-3 overflow-hidden bg-navy-900">
+                        <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     </div>
                     <div>
                         <div class="flex items-center justify-between text-xs mb-1">
-                            <div class="flex items-center gap-1 text-amber-400 font-bold">
-                                <i class="fa-solid fa-star"></i>
-                                <span>${p.rating}</span>
-                            </div>
-                            <span class="text-slate-400">В наявності: <strong class="text-slate-200">${p.stock} шт.</strong></span>
+                            <div class="flex items-center gap-1 text-amber-400 font-bold"><i class="fa-solid fa-star"></i><span>${p.rating}</span></div>
+                            <span class="text-slate-400 text-[10px]">${p.stock} шт.</span>
                         </div>
-                        <h4 class="font-bold text-xs sm:text-sm mb-2 line-clamp-2 h-10 text-slate-100">${p.title}</h4>
-                        <p class="text-[11px] text-slate-400 mb-2">Країна: <strong class="text-slate-300">${p.country}</strong></p>
+                        <h4 class="font-bold text-xs sm:text-sm mb-2 line-clamp-2 text-slate-100">${p.title}</h4>
+                        <p class="text-[10px] text-slate-400 mb-2">${p.country}</p>
                     </div>
                     <div class="flex items-end justify-between mt-2 pt-2 border-t border-slate-800">
                         <div>
-                            <span class="text-[11px] text-slate-500 line-through block">${p.oldPrice.toLocaleString()} ₴</span>
-                            <span class="text-base font-black text-blue-400">${p.price.toLocaleString()} ₴</span>
+                            <span class="text-[10px] text-slate-500 line-through block">${p.oldPrice.toLocaleString()} ₴</span>
+                            <span class="text-sm sm:text-base font-black text-blue-400">${p.price.toLocaleString()} ₴</span>
                         </div>
-                        <button onclick="event.stopPropagation(); addToCart(${p.id})" class="bg-blue-600 hover:bg-blue-500 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow transition" title="В кошик">
-                            <i class="fa-solid fa-plus text-sm"></i>
+                        <button onclick="event.stopPropagation(); addToCart(${p.id})" class="bg-blue-600 hover:bg-blue-500 text-white w-8 h-8 rounded-xl flex items-center justify-center shadow transition" title="В кошик">
+                            <i class="fa-solid fa-cart-plus text-xs"></i>
                         </button>
                     </div>
                 </div>`;
@@ -547,7 +622,7 @@
             if (item) item.qty++; else cart.push({ ...prod, qty: 1 });
             localStorage.setItem('techworld_cart', JSON.stringify(cart));
             updateCartBadge();
-            showToast("Товар успішно додано в кошик!");
+            showToast("Товар додано в кошик!");
         }
 
         function updateCartQty(id, delta) {
@@ -582,7 +657,7 @@
         function openCartModal() {
             const container = document.getElementById('cartItemsContainer');
             if (cart.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-8">Ваш кошик порожній</p>`;
+                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-8">Кошик порожній</p>`;
             } else {
                 container.innerHTML = cart.map(item => `
                     <div class="flex items-center justify-between bg-navy-900 p-3 rounded-xl border border-slate-800">
@@ -607,7 +682,6 @@
             
             document.getElementById('cartItemCount').innerText = totalQty + ' шт.';
             document.getElementById('cartTotal').innerText = subtotal.toLocaleString() + ' ₴';
-            
             document.getElementById('cartModal').classList.remove('hidden');
         }
         function closeCartModal() { document.getElementById('cartModal').classList.add('hidden'); }
@@ -628,19 +702,8 @@
         }
         function closeWishlistModal() { document.getElementById('wishlistModal').classList.add('hidden'); }
 
-        function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
-        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
-        function handleLoginSubmit() {
-            currentUser = { name: "Олександр" };
-            localStorage.setItem('techworld_user', JSON.stringify(currentUser));
-            closeAuthModal();
-            updateHeaderUser();
-            showToast("Успішний вхід!");
-        }
         function updateHeaderUser() {
-            const container = document.getElementById('userHeaderArea');
-            container.innerHTML = currentUser ? `<div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">О</div>` :
-                `<button onclick="openAuthModal()" class="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl">Увійти</button>`;
+            document.getElementById('userHeaderArea').innerHTML = `<div class="w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs shadow">О</div>`;
         }
 
         function showToast(msg) {
